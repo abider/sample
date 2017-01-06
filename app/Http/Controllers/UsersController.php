@@ -10,6 +10,23 @@ use App\Http\Controllers\Controller;
 
 class UsersController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth', [
+            'only' => ['edit', 'update', 'destroy']
+        ]);
+
+        $this->middleware('guest', [
+            'only' => ['create']
+        ]);
+    }
+
+    public function index()
+    {
+        $users = User::paginate(10);
+        return view('users.index', compact('users'));
+    }
+
     public function create()
     {
         return view('users.create');
@@ -38,5 +55,41 @@ class UsersController extends Controller
         Auth::login($user);
         session()->flash('success', '欢迎，您将在这里开启一段新的旅程~');
         return Redirect()->route('users.show', $user->id);
+    }
+
+    public function edit($id)
+    {
+        $user = User::findOrFail($id);
+        $this->authorize('update', $user);
+        return view('users.edit', compact('user'));
+    }
+
+    public function update(Request $request, $id)
+    {
+        $this->validate($request, [
+            'name' => 'required|max:50',
+            'password' => 'confired|min:6'
+        ]);
+
+        $data = array_filter([
+            'name' => $request->name,
+            'password' => $request->password
+        ]);
+
+        $user = User::findOrFail($id);
+        $this->authorize('update', $user);
+        $user->update($data);
+
+        session()->flash('success', '資料更新成功！');
+        return Redirect()->route('users.show', $id);
+    }
+
+    public function destroy($id)
+    {
+        $user = User::findOrfail($id);
+        $this->authorize('destroy', $user);
+        $user->delete();
+        session()->flash('success', '刪除用戶成功！');
+        return back();
     }
 }

@@ -9,6 +9,13 @@ use App\Http\Controllers\Controller;
 
 class Sessionscontroller extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('guest', [
+            'only' => ['create']
+        ]);
+    }
+
     public function create()
     {
         return view('sessions.create');
@@ -28,7 +35,7 @@ class Sessionscontroller extends Controller
 
         if (Auth::attempt($user, $request->has('remember'))) {
             session()->flash('success', '恭喜您，登陸成功');
-            return Redirect()->route('users.show', Auth::id());
+            return Redirect()->intended(route('users.show', Auth::id()));
         } else {
             session()->flash('danger', '驗證不通過！登陸失敗');
             return back();
