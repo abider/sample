@@ -21,3 +21,5 @@ Route::post('login', 'SessionsController@store')->name('login');
 Route::delete('logout', 'SessionsController@destroy')->name('logout');
 
 Route::resource('users', 'UsersController');
+
+Route::get('signup/confirm/{token}', 'UsersController@confirmEmail')->name('email.confirm');
