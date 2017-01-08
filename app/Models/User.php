@@ -28,7 +28,7 @@ class User extends Model implements AuthenticatableContract,
      *
      * @var array
      */
-    protected $fillable = ['name', 'email', 'password'];
+    protected $fillable = ['name', 'email', 'password', 'remember_token', 'activated', 'activation_token'];
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -55,5 +55,16 @@ class User extends Model implements AuthenticatableContract,
     {
         $hash = md5(strtolower(trim($this->email)));
         return "http://www.gravatar.com/avatar/$hash?s=$size";
+    }
+
+    public function statuses()
+    {
+        return $this->hasMany(Status::class);
+    }
+
+    public function feed()
+    {
+        return $this->statuses()
+                    ->orderBy('created_at', 'desc');
     }
 }

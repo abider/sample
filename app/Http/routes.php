@@ -11,6 +11,8 @@
 |
 */
 
+Route::get('/', 'StaticPagesController@home')->name('home');
+
 Route::get('home', 'StaticPagesController@home')->name('home');
 Route::get('about', 'StaticPagesController@about')->name('about');
 Route::get('help', 'StaticPagesController@help')->name('help');
@@ -28,3 +30,5 @@ Route::get('password/email', 'Auth\PasswordController@getEmail')->name('password
 Route::post('password/email', 'Auth\PasswordController@postEmail')->name('password.reset');
 Route::get('password/reset/{token}', 'Auth\PasswordController@getReset')->name('password.edit');
 Route::post('password/reset', 'Auth\PasswordController@postReset')->name('password.update');
+
+Route::resource('statuses', 'StatusesController', ['only' => ['store', 'destroy']]);

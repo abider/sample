@@ -8,7 +8,7 @@
         <h1>感谢您在 Sample 网站进行注册！</h1>
         <p>
             请点击下面的链接完成注册：
-            <a href="{{ route('confirm_email', $user->activation_token) }}">
+            <a href="{{ route('email.confirm', $user->activation_token) }}">
                 {{ route('email.confirm', $user->activation_token) }}
             </a>
         </p>

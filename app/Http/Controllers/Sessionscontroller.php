@@ -32,7 +32,7 @@ class Sessionscontroller extends Controller
             'email' => $request->email,
             'password' => $request->password
         ];
-
+        
         if (Auth::attempt($user, $request->has('remember'))) {
             if (Auth::user()->activated) {
                 session()->flash('success', '恭喜您，登陸成功');
